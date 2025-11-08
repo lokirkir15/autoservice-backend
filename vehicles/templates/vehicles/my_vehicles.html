@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Moje pojazdy</title>
+</head>
+<body>
+<h1>Moje pojazdy</h1>
+
+<p>
+    Jesteś zalogowany jako: {{ request.user.username }}
+    | <a href="{% url 'create_appointment' %}">Umów wizytę</a>
+    | <a href="{% url 'logout' %}">Wyloguj</a>
+</p>
+
+<p><a href="{% url 'vehicle_create' %}">+ Dodaj nowy pojazd</a></p>
+
+{% if vehicles %}
+    <table border="1" cellpadding="5">
+        <thead>
+        <tr>
+            <th>Nr rejestracyjny</th>
+            <th>Marka / model</th>
+            <th>Rok</th>
+            <th>Przebieg</th>
+            <th>Akcje</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for v in vehicles %}
+            <tr>
+                <td>{{ v.registration_number }}</td>
+                <td>{{ v.make }} {{ v.model }}</td>
+                <td>{{ v.year|default:"-" }}</td>
+                <td>{{ v.current_mileage|default:"-" }}</td>
+                <td>
+                    <a href="{% url 'vehicle_update' v.pk %}">Edytuj</a> |
+                    <a href="{% url 'vehicle_delete' v.pk %}">Usuń</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>Nie masz jeszcze żadnych pojazdów.</p>
+{% endif %}
+
+</body>
+</html>

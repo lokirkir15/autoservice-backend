@@ -4,6 +4,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
+from vehicles.models import Vehicle
+
 from .forms import AppointmentForm
 from .models import Appointment
 from .utils import (
@@ -15,6 +17,10 @@ from .utils import (
 
 @login_required
 def create_appointment(request):
+    if not Vehicle.objects.filter(owner=request.user).exists():
+        messages.info(request, "Najpierw dodaj pojazd, aby umówić wizytę.")
+        return redirect("vehicle_create")
+    
     if request.method == "POST":
         form = AppointmentForm(request.POST, user=request.user)
         if form.is_valid():

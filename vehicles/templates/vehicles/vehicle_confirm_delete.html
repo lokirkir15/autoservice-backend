@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Usuń pojazd</title>
+</head>
+<body>
+<h1>Usuń pojazd</h1>
+
+<p>Czy na pewno chcesz usunąć pojazd: <strong>{{ vehicle }}</strong>?</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Tak, usuń</button>
+    <a href="{% url 'my_vehicles' %}">Anuluj</a>
+</form>
+
+</body>
+</html>
