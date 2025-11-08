@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Moje wizyty</title>
+</head>
+<body>
+<h1>Moje wizyty</h1>
+
+<p>
+    Jesteś zalogowany jako: {{ request.user.username }}
+    | <a href="{% url 'create_appointment' %}">Umów nową wizytę</a>
+    | <a href="{% url 'logout' %}">Wyloguj</a>
+</p>
+
+{% if appointments %}
+    <table border="1" cellpadding="5">
+        <thead>
+        <tr>
+            <th>Data</th>
+            <th>Pojazd</th>
+            <th>Usługa</th>
+            <th>Status</th>
+            <th>Stanowisko</th>
+            <th>Technik</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for a in appointments %}
+            <tr>
+                <td>{{ a.start|date:"Y-m-d H:i" }}</td>
+                <td>{{ a.vehicle }}</td>
+                <td>{{ a.service_type }}</td>
+                <td>{{ a.get_status_display }}</td>
+                <td>{{ a.workstation|default:"-" }}</td>
+                <td>{{ a.assigned_technician|default:"-" }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>Nie masz jeszcze żadnych wizyt.</p>
+{% endif %}
+
+</body>
+</html>

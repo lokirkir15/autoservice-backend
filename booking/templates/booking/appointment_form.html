@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Umów wizytę</title>
+</head>
+<body>
+<p>
+    Jesteś zalogowany jako: {{ request.user.username }}
+    | <a href="{% url 'my_appointments' %}">Moje wizyty</a>
+    | <a href="{% url 'logout' %}">Wyloguj</a>
+</p>
+<h1>Umów wizytę</h1>
+
+{% if messages %}
+<ul>
+    {% for message in messages %}
+        <li>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Zarezerwuj</button>
+</form>
+
+</body>
+</html>
