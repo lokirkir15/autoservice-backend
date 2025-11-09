@@ -1,3 +1,4 @@
+import logging
 from datetime import timedelta
 
 from django.conf import settings
@@ -6,6 +7,7 @@ from accounts.models import User
 from workshop.models import Workstation
 from .models import Appointment
 
+logger = logging.getLogger(__name__)
 
 def get_max_parallel_jobs() -> int:
     """
@@ -74,14 +76,10 @@ def get_available_workstation(start, duration: timedelta):
     return None
 
 def send_appointment_confirmation(appointment):
-    """
-    Wysyła proste potwierdzenie wizyty do klienta.
-    Jeśli klient nie ma adresu e-mail, funkcja nic nie robi.
-    """
     customer = appointment.customer
 
     if not customer.email:
-        return 
+        return
 
     subject = "Potwierdzenie wizyty w serwisie MechAuto"
     start_str = appointment.start.strftime("%Y-%m-%d %H:%M")
@@ -94,10 +92,14 @@ def send_appointment_confirmation(appointment):
         f"Do zobaczenia w serwisie!"
     )
 
-    send_mail(
-        subject,
-        message,
-        settings.DEFAULT_FROM_EMAIL,
-        [customer.email],
-        fail_silently=True,
-    )
+    try:
+        send_mail(
+            subject,
+            message,
+            settings.DEFAULT_FROM_EMAIL,
+            [customer.email],
+            fail_silently=True,  # i tak, na wszelki wypadek
+        )
+    except Exception as e:
+        logger.exception("Błąd podczas wysyłania maila potwierdzającego wizytę: %s", e)
+        # nie rzucamy dalej – nie chcemy wywalić requestu
