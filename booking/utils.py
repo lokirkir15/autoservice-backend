@@ -1,7 +1,7 @@
 from datetime import timedelta
 
 from django.conf import settings
-
+from django.core.mail import send_mail
 from accounts.models import User
 from workshop.models import Workstation
 from .models import Appointment
@@ -72,3 +72,32 @@ def get_available_workstation(start, duration: timedelta):
         if not has_overlap:
             return ws
     return None
+
+def send_appointment_confirmation(appointment):
+    """
+    Wysyła proste potwierdzenie wizyty do klienta.
+    Jeśli klient nie ma adresu e-mail, funkcja nic nie robi.
+    """
+    customer = appointment.customer
+
+    if not customer.email:
+        return 
+
+    subject = "Potwierdzenie wizyty w serwisie MechAuto"
+    start_str = appointment.start.strftime("%Y-%m-%d %H:%M")
+    message = (
+        f"Cześć {customer.username},\n\n"
+        f"Twoja wizyta została umówiona.\n\n"
+        f"Data i godzina: {start_str}\n"
+        f"Pojazd: {appointment.vehicle}\n"
+        f"Usługa: {appointment.service_type}\n\n"
+        f"Do zobaczenia w serwisie!"
+    )
+
+    send_mail(
+        subject,
+        message,
+        settings.DEFAULT_FROM_EMAIL,
+        [customer.email],
+        fail_silently=True,
+    )

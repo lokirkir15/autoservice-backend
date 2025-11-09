@@ -12,6 +12,7 @@ from .utils import (
     is_slot_available,
     get_available_technician,
     get_available_workstation,
+    send_appointment_confirmation,
 )
 
 
@@ -42,7 +43,7 @@ def create_appointment(request):
                         "Brak wolnego technika lub stanowiska w tym terminie."
                     )
                 else:
-                    Appointment.objects.create(
+                    appointment = Appointment.objects.create(
                         customer=request.user,
                         vehicle=vehicle,
                         service_type=service_type,
@@ -51,6 +52,8 @@ def create_appointment(request):
                         assigned_technician=technician,
                         workstation=workstation,
                     )
+                    # wyslij e-mail
+                    send_appointment_confirmation(appointment)
                     messages.success(request, "Wizyta została umówiona.")
                     return redirect("appointment_success")
     else:
