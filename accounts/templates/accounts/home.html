@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>MechAuto – panel</title>
+</head>
+<body>
+<h1>MechAuto – panel serwisowy</h1>
+
+{% if request.user.is_authenticated %}
+    <p>
+        Witaj, <strong>{{ request.user.username }}</strong>!
+        | <a href="{% url 'logout' %}">Wyloguj</a>
+    </p>
+
+    <h2>Dla klientów</h2>
+    <ul>
+        <li><a href="{% url 'my_vehicles' %}">Moje pojazdy</a></li>
+        <li><a href="{% url 'create_appointment' %}">Umów wizytę</a></li>
+        <li><a href="{% url 'my_appointments' %}">Moje wizyty</a></li>
+        <li><a href="{% url 'my_tires' %}">Moje komplety opon</a></li>
+    </ul>
+
+    {% if request.user.is_staff %}
+        <h2>Dla serwisu</h2>
+        <ul>
+            <li><a href="{% url 'workshop_dashboard' %}">Panel warsztatu (dzisiejsze wizyty)</a></li>
+            <li><a href="{% url 'warehouse_list' %}">Magazyn opon</a></li>
+        </ul>
+    {% endif %}
+
+{% else %}
+    <p>
+        Witaj w systemie obsługi serwisu MechAuto.
+    </p>
+    <p>
+        Aby zarządzać pojazdami, wizytami i magazynem opon, zaloguj się lub załóż konto.
+    </p>
+
+    <p>
+        <a href="{% url 'login' %}">Zaloguj się</a> |
+        <a href="{% url 'register' %}">Zarejestruj się</a>
+    </p>
+
+    <h2>Co zrobisz po zalogowaniu?</h2>
+    <ul>
+        <li>Dodasz i zobaczysz swoje pojazdy</li>
+        <li>Umówisz wizytę w serwisie</li>
+        <li>Sprawdzisz historię wizyt</li>
+        <li>Zobaczysz swoje komplety opon w magazynie</li>
+    </ul>
+{% endif %}
+
+</body>
+</html>
