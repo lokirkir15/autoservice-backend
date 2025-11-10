@@ -4,6 +4,7 @@ from django.contrib import messages
 
 from .models import Vehicle
 from .forms import VehicleForm
+from booking.models import Appointment
 
 @login_required
 def my_vehicles(request):
@@ -53,3 +54,23 @@ def vehicle_delete(request, pk):
         return redirect("my_vehicles")
 
     return render(request, "vehicles/vehicle_confirm_delete.html", {"vehicle": vehicle})
+
+
+@login_required
+def vehicle_history(request, pk):
+    vehicle = get_object_or_404(Vehicle, pk=pk, owner=request.user)
+    appointments = (
+        Appointment.objects
+        .filter(vehicle=vehicle)
+        .select_related("service_type", "workstation", "assigned_technician")
+        .order_by("-start")
+    )
+
+    return render(
+        request,
+        "vehicles/vehicle_history.html",
+        {
+            "vehicle": vehicle,
+            "appointments": appointments,
+        },
+    )

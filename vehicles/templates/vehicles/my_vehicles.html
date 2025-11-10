@@ -35,8 +35,10 @@
                 <td>{{ v.current_mileage|default:"-" }}</td>
                 <td>
                     <a href="{% url 'vehicle_update' v.pk %}">Edytuj</a> |
-                    <a href="{% url 'vehicle_delete' v.pk %}">Usuń</a>
+                    <a href="{% url 'vehicle_delete' v.pk %}">Usuń</a> |
+                    <a href="{% url 'vehicle_history' v.pk %}">Historia</a>
                 </td>
+
             </tr>
         {% endfor %}
         </tbody>
