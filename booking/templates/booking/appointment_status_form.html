@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Zmień status wizyty</title>
+</head>
+<body>
+<h1>Zmień status wizyty</h1>
+
+<p>
+    Wizyta: {{ appointment.start|date:"Y-m-d H:i" }} –
+    {{ appointment.vehicle }} – {{ appointment.service_type }}
+</p>
+
+<form method="post">
+    {% csrf_token %}
+    <label for="id_status">Status:</label>
+    <select name="status" id="id_status">
+        {% for value, label in status_choices %}
+            <option value="{{ value }}" {% if appointment.status == value %}selected{% endif %}>
+                {{ label }}
+            </option>
+        {% endfor %}
+    </select>
+    <button type="submit">Zapisz</button>
+</form>
+
+<p><a href="{% url 'workshop_dashboard' %}">Wróć do panelu</a></p>
+
+</body>
+</html>

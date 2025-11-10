@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel warsztatu</title>
+</head>
+<body>
+<h1>Dzisiejsze wizyty – {{ today }}</h1>
+
+<p>
+    Zalogowano jako: {{ request.user.username }}
+    | <a href="{% url 'logout' %}">Wyloguj</a>
+</p>
+
+{% if messages %}
+<ul>
+    {% for message in messages %}
+        <li>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if appointments %}
+    <table border="1" cellpadding="5">
+        <thead>
+        <tr>
+            <th>Godzina</th>
+            <th>Klient</th>
+            <th>Pojazd</th>
+            <th>Usługa</th>
+            <th>Stanowisko</th>
+            <th>Technik</th>
+            <th>Status</th>
+            <th>Akcje</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for a in appointments %}
+            <tr>
+                <td>{{ a.start|date:"H:i" }}</td>
+                <td>{{ a.customer.username }}</td>
+                <td>{{ a.vehicle }}</td>
+                <td>{{ a.service_type }}</td>
+                <td>{{ a.workstation|default:"-" }}</td>
+                <td>{{ a.assigned_technician|default:"-" }}</td>
+                <td>{{ a.get_status_display }}</td>
+                <td>
+                    <a href="{% url 'update_appointment_status' a.pk %}">Zmień status</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>Brak wizyt na dziś.</p>
+{% endif %}
+
+</body>
+</html>

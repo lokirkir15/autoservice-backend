@@ -1,5 +1,8 @@
 from datetime import timedelta
 
+from django.utils import timezone
+from django.contrib.admin.views.decorators import staff_member_required
+from django.shortcuts import get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
@@ -75,4 +78,42 @@ def my_appointments(request):
         request,
         "booking/my_appointments.html",
         {"appointments": appointments}
+    )
+
+@staff_member_required
+def workshop_dashboard(request):
+    today = timezone.localdate()
+    appointments = Appointment.objects.filter(
+        start__date=today
+    ).order_by("start")
+
+    return render(
+        request,
+        "booking/workshop_dashboard.html",
+        {"appointments": appointments, "today": today},
+    )
+
+@staff_member_required
+def update_appointment_status(request, pk):
+    appointment = get_object_or_404(Appointment, pk=pk)
+
+    if request.method == "POST":
+        new_status = request.POST.get("status")
+        valid_values = [choice[0] for choice in Appointment.Status.choices]
+
+        if new_status in valid_values:
+            appointment.status = new_status
+            appointment.save()
+            messages.success(request, "Status wizyty został zaktualizowany.")
+            return redirect("workshop_dashboard")
+        else:
+            messages.error(request, "Nieprawidłowy status.")
+
+    return render(
+        request,
+        "booking/appointment_status_form.html",
+        {
+            "appointment": appointment,
+            "status_choices": Appointment.Status.choices,
+        },
     )
