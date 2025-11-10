@@ -12,13 +12,15 @@ class TireSet(models.Model):
     customer = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='tire_sets'
+        related_name='tire_sets',
+        verbose_name="Klient"
     )
     vehicle = models.ForeignKey(
         Vehicle,
         on_delete=models.SET_NULL,
         null=True, blank=True,
-        related_name='tire_sets'
+        related_name='tire_sets',
+        verbose_name="Pojazd"
     )
     description = models.CharField(
         "Opis",

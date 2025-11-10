@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Usuń komplet opon</title>
+</head>
+<body>
+<h1>Usuń komplet opon</h1>
+
+<p>Czy na pewno chcesz usunąć komplet <strong>{{ tire_set.identifier }}</strong> klienta {{ tire_set.customer }}?</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Tak, usuń</button>
+    <a href="{% url 'warehouse_list' %}">Anuluj</a>
+</form>
+
+</body>
+</html>

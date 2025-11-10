@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Moje komplety opon</title>
+</head>
+<body>
+<h1>Moje komplety opon</h1>
+
+<p>
+    Jesteś zalogowany jako: {{ request.user.username }}
+    | <a href="{% url 'my_vehicles' %}">Moje pojazdy</a>
+    | <a href="{% url 'my_appointments' %}">Moje wizyty</a>
+    | <a href="{% url 'logout' %}">Wyloguj</a>
+</p>
+
+{% if tire_sets %}
+    <table border="1" cellpadding="5">
+        <thead>
+        <tr>
+            <th>ID kompletu</th>
+            <th>Pojazd</th>
+            <th>Opis</th>
+            <th>W magazynie?</th>
+            <th>Lokalizacja</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for t in tire_sets %}
+            <tr>
+                <td>{{ t.identifier }}</td>
+                <td>{{ t.vehicle|default:"(nieprzypisany)" }}</td>
+                <td>{{ t.description|default:"-" }}</td>
+                <td>{{ t.is_in_storage|yesno:"Tak,Nie" }}</td>
+                <td>{{ t.location|default:"-" }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>Nie masz jeszcze żadnych kompletów opon w magazynie.</p>
+{% endif %}
+
+</body>
+</html>

@@ -9,6 +9,7 @@
 
 <p>
     Zalogowano jako: {{ request.user.username }}
+    | <a href="{% url 'warehouse_list' %}">Magazyn opon</a>
     | <a href="{% url 'logout' %}">Wyloguj</a>
 </p>
 
