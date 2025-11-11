@@ -1,5 +1,5 @@
 import logging
-from datetime import timedelta
+from datetime import timedelta, time
 
 from django.conf import settings
 from django.core.mail import send_mail
@@ -10,12 +10,40 @@ from workshop.models import Workstation
 from .models import Appointment
 
 logger = logging.getLogger(__name__)
+WORKDAY_START = time(8, 0)
+WORKDAY_END = time(16, 0)
+WORKING_DAYS = {0, 1, 2, 3, 4}
+
+def is_within_working_hours(start, duration_minutes):
+    """
+    start: datetime (aware lub naive).
+    Zamieniamy wszystko na lokalny czas bez strefy, bo do godzin pracy
+    interesuje nas tylko lokalna data/godzina.
+    """
+    if timezone.is_aware(start):
+        start_local = start.astimezone(timezone.get_current_timezone()).replace(tzinfo=None)
+    else:
+        start_local = start  # zakładamy, że już jest w lokalnej strefie
+
+    # weekend
+    if start_local.weekday() not in WORKING_DAYS:
+        return False, "Serwis pracuje od poniedziałku do piątku."
+
+    start_time = start_local.time()
+    end = start_local + timedelta(minutes=duration_minutes)
+    end_time = end.time()
+
+    # czy mieści się w jednym dniu
+    if start_local.date() != end.date():
+        return False, "Czas trwania usługi musi zmieścić się w jednym dniu pracy serwisu."
+
+    # godziny pracy
+    if start_time < WORKDAY_START or end_time > WORKDAY_END:
+        return False, "Serwis przyjmuje wizyty w godzinach 08:00–16:00."
+
+    return True, ""
 
 def get_max_parallel_jobs() -> int:
-    """
-    Maksymalna liczba równoległych zleceń:
-    min(liczba aktywnych stanowisk, liczba aktywnych techników).
-    """
     technicians = User.objects.filter(is_technician=True, is_active=True).count()
     workstations = Workstation.objects.filter(is_active=True).count()
     if technicians == 0 or workstations == 0:
