@@ -1,55 +1,95 @@
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <title>MechAuto – panel</title>
-</head>
-<body>
-<h1>MechAuto – panel serwisowy</h1>
+{% extends "base.html" %}
 
-{% if request.user.is_authenticated %}
-    <p>
-        Witaj, <strong>{{ request.user.username }}</strong>!
-        | <a href="{% url 'logout' %}">Wyloguj</a>
+{% block title %}MechAuto – panel{% endblock %}
+
+{% block content %}
+  {% if request.user.is_authenticated %}
+    <h1 class="mb-4">Panel główny</h1>
+    <p class="lead">
+      Witaj, <strong>{{ request.user.username }}</strong>!
     </p>
 
-    <h2>Dla klientów</h2>
+    <div class="row">
+      <div class="col-md-6 col-lg-4 mb-3">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">Moje pojazdy</h5>
+            <p class="card-text">Zarządzaj swoimi autami w systemie.</p>
+            <a href="{% url 'my_vehicles' %}" class="btn btn-primary">Przejdź</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4 mb-3">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">Umów wizytę</h5>
+            <p class="card-text">Zarezerwuj termin wizyty w serwisie.</p>
+            <a href="{% url 'create_appointment' %}" class="btn btn-primary">Umów wizytę</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4 mb-3">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">Moje wizyty</h5>
+            <p class="card-text">Podgląd historii i nadchodzących wizyt.</p>
+            <a href="{% url 'my_appointments' %}" class="btn btn-primary">Zobacz</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-lg-4 mb-3">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">Moje komplety opon</h5>
+            <p class="card-text">Sprawdź, jakie komplety przechowujemy w magazynie.</p>
+            <a href="{% url 'my_tires' %}" class="btn btn-primary">Zobacz</a>
+          </div>
+        </div>
+      </div>
+
+      {% if request.user.is_staff %}
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="card h-100 border-success">
+            <div class="card-body">
+              <h5 class="card-title">Panel warsztatu</h5>
+              <p class="card-text">Dzisiejsze wizyty i zarządzanie statusem.</p>
+              <a href="{% url 'workshop_dashboard' %}" class="btn btn-success">Otwórz panel</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4 mb-3">
+          <div class="card h-100 border-success">
+            <div class="card-body">
+              <h5 class="card-title">Magazyn opon</h5>
+              <p class="card-text">Przegląd kompletów opon w magazynie.</p>
+              <a href="{% url 'warehouse_list' %}" class="btn btn-success">Przejdź</a>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+
+  {% else %}
+    <h1 class="mb-3">Witaj w MechAuto</h1>
+    <p class="lead">
+      System do obsługi Twoich wizyt serwisowych, pojazdów i magazynu opon.
+    </p>
+    <p>
+      <a href="{% url 'login' %}" class="btn btn-primary me-2">Zaloguj się</a>
+      <a href="{% url 'register' %}" class="btn btn-outline-secondary">Zarejestruj się</a>
+    </p>
+
+    <hr>
+    <h2 class="h4 mt-4">Co zrobisz po zalogowaniu?</h2>
     <ul>
-        <li><a href="{% url 'my_vehicles' %}">Moje pojazdy</a></li>
-        <li><a href="{% url 'create_appointment' %}">Umów wizytę</a></li>
-        <li><a href="{% url 'my_appointments' %}">Moje wizyty</a></li>
-        <li><a href="{% url 'my_tires' %}">Moje komplety opon</a></li>
+      <li>Dodasz i będziesz zarządzać swoimi pojazdami</li>
+      <li>Umówisz wizyty w serwisie w dostępnych terminach</li>
+      <li>Sprawdzisz historię napraw i przeglądów</li>
+      <li>Zobaczysz swoje komplety opon przechowywane w warsztacie</li>
     </ul>
-
-    {% if request.user.is_staff %}
-        <h2>Dla serwisu</h2>
-        <ul>
-            <li><a href="{% url 'workshop_dashboard' %}">Panel warsztatu (dzisiejsze wizyty)</a></li>
-            <li><a href="{% url 'warehouse_list' %}">Magazyn opon</a></li>
-        </ul>
-    {% endif %}
-
-{% else %}
-    <p>
-        Witaj w systemie obsługi serwisu MechAuto.
-    </p>
-    <p>
-        Aby zarządzać pojazdami, wizytami i magazynem opon, zaloguj się lub załóż konto.
-    </p>
-
-    <p>
-        <a href="{% url 'login' %}">Zaloguj się</a> |
-        <a href="{% url 'register' %}">Zarejestruj się</a>
-    </p>
-
-    <h2>Co zrobisz po zalogowaniu?</h2>
-    <ul>
-        <li>Dodasz i zobaczysz swoje pojazdy</li>
-        <li>Umówisz wizytę w serwisie</li>
-        <li>Sprawdzisz historię wizyt</li>
-        <li>Zobaczysz swoje komplety opon w magazynie</li>
-    </ul>
-{% endif %}
-
-</body>
-</html>
+  {% endif %}
+{% endblock %}

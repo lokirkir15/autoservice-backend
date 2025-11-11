@@ -1,30 +1,35 @@
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <title>Umów wizytę</title>
-</head>
-<body>
-<p>
-    Jesteś zalogowany jako: {{ request.user.username }}
-    | <a href="{% url 'my_appointments' %}">Moje wizyty</a>
-    | <a href="{% url 'logout' %}">Wyloguj</a>
-</p>
-<h1>Umów wizytę</h1>
+{% extends "base.html" %}
 
-{% if messages %}
-<ul>
-    {% for message in messages %}
-        <li>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
+{% block title %}Umów wizytę – MechAuto{% endblock %}
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Zarezerwuj</button>
+{% block content %}
+<h1 class="h3 mb-3">Umów wizytę</h1>
+
+<form method="post" class="card p-3">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+
+  <div class="mb-3">
+    <label class="form-label" for="{{ form.vehicle.id_for_label }}">Pojazd</label>
+    {{ form.vehicle }}
+    {{ form.vehicle.errors }}
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label" for="{{ form.service_type.id_for_label }}">Usługa</label>
+    {{ form.service_type }}
+    {{ form.service_type.errors }}
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label" for="{{ form.start.id_for_label }}">Data i godzina</label>
+    {{ form.start }}
+    {{ form.start.errors }}
+    <div class="form-text">
+      Serwis pracuje od poniedziałku do piątku, w godzinach 08:00–16:00.
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Zarezerwuj termin</button>
 </form>
-
-</body>
-</html>
+{% endblock %}
