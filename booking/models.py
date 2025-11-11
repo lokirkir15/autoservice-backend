@@ -46,5 +46,13 @@ class Appointment(models.Model):
     mileage_at_service = models.PositiveIntegerField("Przebieg przy wizycie", null=True, blank=True)
     notes = models.TextField("Notatki", blank=True)
 
+    notes = models.TextField("Notatki", blank=True)
+
+    reminder_sent = models.BooleanField(
+        "Przypomnienie wysłane",
+        default=False,
+        help_text="Czy wysłano już przypomnienie o tej wizycie"
+    )
+
     def __str__(self):
         return f"{self.vehicle} – {self.service_type} – {self.start}"

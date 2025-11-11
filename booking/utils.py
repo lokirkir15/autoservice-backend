@@ -3,6 +3,8 @@ from datetime import timedelta
 
 from django.conf import settings
 from django.core.mail import send_mail
+from django.utils import timezone
+
 from accounts.models import User
 from workshop.models import Workstation
 from .models import Appointment
@@ -75,14 +77,33 @@ def get_available_workstation(start, duration: timedelta):
             return ws
     return None
 
-def send_appointment_confirmation(appointment):
+def _send_email(subject: str, message: str, recipient: str) -> None:
+    """
+    Wspólny helper do wysyłania maili. Nie podnosi wyjątków, zamiast tego loguje błąd.
+    """
+    if not recipient:
+        return
+
+    try:
+        send_mail(
+            subject,
+            message,
+            settings.DEFAULT_FROM_EMAIL,
+            [recipient],
+            fail_silently=True,  # a i tak trzymamy to w try/except
+        )
+    except Exception as e:
+        logger.exception("Błąd podczas wysyłania maila: %s", e)
+
+def send_appointment_confirmation(appointment: Appointment) -> None:
     customer = appointment.customer
 
     if not customer.email:
         return
 
     subject = "Potwierdzenie wizyty w serwisie MechAuto"
-    start_str = appointment.start.strftime("%Y-%m-%d %H:%M")
+    start_str = appointment.start.astimezone(timezone.get_current_timezone()).strftime("%Y-%m-%d %H:%M")
+
     message = (
         f"Cześć {customer.username},\n\n"
         f"Twoja wizyta została umówiona.\n\n"
@@ -92,14 +113,28 @@ def send_appointment_confirmation(appointment):
         f"Do zobaczenia w serwisie!"
     )
 
-    try:
-        send_mail(
-            subject,
-            message,
-            settings.DEFAULT_FROM_EMAIL,
-            [customer.email],
-            fail_silently=True,  # i tak, na wszelki wypadek
-        )
-    except Exception as e:
-        logger.exception("Błąd podczas wysyłania maila potwierdzającego wizytę: %s", e)
-        # nie rzucamy dalej – nie chcemy wywalić requestu
+    _send_email(subject, message, customer.email)
+
+def send_appointment_reminder(appointment: Appointment) -> None:
+    """
+    Wysyła przypomnienie o wizycie dzień wcześniej.
+    """
+    customer = appointment.customer
+
+    if not customer.email:
+        return
+
+    subject = "Przypomnienie o jutrzejszej wizycie w serwisie MechAuto"
+    start_local = appointment.start.astimezone(timezone.get_current_timezone())
+    start_str = start_local.strftime("%Y-%m-%d %H:%M")
+
+    message = (
+        f"Cześć {customer.username},\n\n"
+        f"Przypominamy o Twojej wizycie w serwisie MechAuto.\n\n"
+        f"Data i godzina: {start_str}\n"
+        f"Pojazd: {appointment.vehicle}\n"
+        f"Usługa: {appointment.service_type}\n\n"
+        f"Jeśli nie możesz przyjechać, prosimy o kontakt z serwisem.\n"
+    )
+
+    _send_email(subject, message, customer.email)
