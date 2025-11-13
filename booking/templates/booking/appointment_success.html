@@ -1,12 +1,9 @@
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <title>Wizyta umówiona</title>
-</head>
-<body>
-<h1>Wizyta została umówiona</h1>
-<p>Dziękujemy. Szczegóły wizyty możesz podejrzeć w panelu (w przyszłości 😉).</p>
-<a href="/booking/new/">Umów kolejną wizytę</a>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Wizyta umówiona – MechAuto{% endblock %}
+{% block content %}
+<div class="alert alert-success">
+  Wizyta została umówiona. Potwierdzenie zobaczysz w „Moje wizyty”.
+</div>
+<a href="{% url 'my_appointments' %}" class="btn btn-primary">Przejdź do „Moje wizyty”</a>
+<a href="{% url 'create_appointment' %}" class="btn btn-outline-secondary">Umów kolejną</a>
+{% endblock %}

@@ -1,19 +1,11 @@
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <title>Usuń pojazd</title>
-</head>
-<body>
-<h1>Usuń pojazd</h1>
-
+{% extends "base.html" %}
+{% block title %}Usuń pojazd – MechAuto{% endblock %}
+{% block content %}
+<h1 class="h4 mb-3">Usuń pojazd</h1>
 <p>Czy na pewno chcesz usunąć pojazd: <strong>{{ vehicle }}</strong>?</p>
-
-<form method="post">
-    {% csrf_token %}
-    <button type="submit">Tak, usuń</button>
-    <a href="{% url 'my_vehicles' %}">Anuluj</a>
+<form method="post" class="d-flex gap-2">
+  {% csrf_token %}
+  <button type="submit" class="btn btn-danger">Tak, usuń</button>
+  <a href="{% url 'my_vehicles' %}" class="btn btn-outline-secondary">Anuluj</a>
 </form>
-
-</body>
-</html>
+{% endblock %}

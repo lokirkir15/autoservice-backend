@@ -1,52 +1,38 @@
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <title>Historia pojazdu {{ vehicle.registration_number }}</title>
-</head>
-<body>
-<h1>Historia pojazdu</h1>
-
-<p>
-    Pojazd: <strong>{{ vehicle.registration_number }}</strong> –
-    {{ vehicle.make }} {{ vehicle.model }}
-    {% if vehicle.year %} ({{ vehicle.year }}){% endif %}
-</p>
-
-<p>
-    <a href="{% url 'my_vehicles' %}">← Wróć do listy pojazdów</a>
-</p>
+{% extends "base.html" %}
+{% block title %}Historia pojazdu – MechAuto{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">Historia pojazdu {{ vehicle.registration_number }}</h1>
+<p class="text-muted mb-3">{{ vehicle.make }} {{ vehicle.model }} {% if vehicle.year %}({{ vehicle.year }}){% endif %}</p>
 
 {% if appointments %}
-    <table border="1" cellpadding="5">
-        <thead>
-        <tr>
-            <th>Data</th>
-            <th>Usługa</th>
-            <th>Status</th>
-            <th>Przebieg</th>
-            <th>Stanowisko</th>
-            <th>Technik</th>
-            <th>Notatki</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for a in appointments %}
-            <tr>
-                <td>{{ a.start|date:"Y-m-d H:i" }}</td>
-                <td>{{ a.service_type }}</td>
-                <td>{{ a.get_status_display }}</td>
-                <td>{{ a.mileage_at_service|default:"-" }}</td>
-                <td>{{ a.workstation|default:"-" }}</td>
-                <td>{{ a.assigned_technician|default:"-" }}</td>
-                <td>{{ a.notes|default:"-" }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+  <table class="table table-striped table-sm">
+    <thead>
+      <tr>
+        <th>Data</th>
+        <th>Usługa</th>
+        <th>Status</th>
+        <th>Przebieg</th>
+        <th>Stanowisko</th>
+        <th>Technik</th>
+        <th>Notatki</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for a in appointments %}
+      <tr>
+        <td>{{ a.start|date:"Y-m-d H:i" }}</td>
+        <td>{{ a.service_type }}</td>
+        <td>{{ a.get_status_display }}</td>
+        <td>{{ a.mileage_at_service|default:"-" }}</td>
+        <td>{{ a.workstation|default:"-" }}</td>
+        <td>{{ a.assigned_technician|default:"-" }}</td>
+        <td>{{ a.notes|default:"-" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 {% else %}
-    <p>Ten pojazd nie ma jeszcze żadnych wizyt w historii.</p>
+  <div class="alert alert-info">Brak wizyt w historii.</div>
 {% endif %}
-
-</body>
-</html>
+<a href="{% url 'my_vehicles' %}" class="btn btn-outline-secondary">← Wróć</a>
+{% endblock %}

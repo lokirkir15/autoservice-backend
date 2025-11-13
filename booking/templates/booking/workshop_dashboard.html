@@ -1,60 +1,38 @@
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <title>Panel warsztatu</title>
-</head>
-<body>
-<h1>Dzisiejsze wizyty – {{ today }}</h1>
-
-<p>
-    Zalogowano jako: {{ request.user.username }}
-    | <a href="{% url 'warehouse_list' %}">Magazyn opon</a>
-    | <a href="{% url 'logout' %}">Wyloguj</a>
-</p>
-
-{% if messages %}
-<ul>
-    {% for message in messages %}
-        <li>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
+{% extends "base.html" %}
+{% block title %}Panel warsztatu – MechAuto{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">Dzisiejsze wizyty – {{ today }}</h1>
 
 {% if appointments %}
-    <table border="1" cellpadding="5">
-        <thead>
-        <tr>
-            <th>Godzina</th>
-            <th>Klient</th>
-            <th>Pojazd</th>
-            <th>Usługa</th>
-            <th>Stanowisko</th>
-            <th>Technik</th>
-            <th>Status</th>
-            <th>Akcje</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for a in appointments %}
-            <tr>
-                <td>{{ a.start|date:"H:i" }}</td>
-                <td>{{ a.customer.username }}</td>
-                <td>{{ a.vehicle }}</td>
-                <td>{{ a.service_type }}</td>
-                <td>{{ a.workstation|default:"-" }}</td>
-                <td>{{ a.assigned_technician|default:"-" }}</td>
-                <td>{{ a.get_status_display }}</td>
-                <td>
-                    <a href="{% url 'update_appointment_status' a.pk %}">Zmień status</a>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+  <table class="table table-striped table-sm align-middle">
+    <thead>
+      <tr>
+        <th>Godzina</th>
+        <th>Klient</th>
+        <th>Pojazd</th>
+        <th>Usługa</th>
+        <th>Stanowisko</th>
+        <th>Technik</th>
+        <th>Status</th>
+        <th>Akcje</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for a in appointments %}
+      <tr>
+        <td>{{ a.start|date:"H:i" }}</td>
+        <td>{{ a.customer.username }}</td>
+        <td>{{ a.vehicle }}</td>
+        <td>{{ a.service_type }}</td>
+        <td>{{ a.workstation|default:"-" }}</td>
+        <td>{{ a.assigned_technician|default:"-" }}</td>
+        <td><span class="badge text-bg-secondary">{{ a.get_status_display }}</span></td>
+        <td><a class="btn btn-sm btn-outline-primary" href="{% url 'update_appointment_status' a.pk %}">Zmień status</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 {% else %}
-    <p>Brak wizyt na dziś.</p>
+  <div class="alert alert-info">Brak wizyt na dziś.</div>
 {% endif %}
-
-</body>
-</html>
+{% endblock %}

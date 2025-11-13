@@ -1,52 +1,39 @@
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <title>Moje pojazdy</title>
-</head>
-<body>
-<h1>Moje pojazdy</h1>
-
-<p>
-    Jesteś zalogowany jako: {{ request.user.username }}
-    | <a href="{% url 'create_appointment' %}">Umów wizytę</a>
-    | <a href="{% url 'my_tires' %}">Moje komplety opon</a>
-    | <a href="{% url 'logout' %}">Wyloguj</a>
-</p>
-
-<p><a href="{% url 'vehicle_create' %}">+ Dodaj nowy pojazd</a></p>
+{% extends "base.html" %}
+{% block title %}Moje pojazdy – MechAuto{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 m-0">Moje pojazdy</h1>
+  <a class="btn btn-primary" href="{% url 'vehicle_create' %}">+ Dodaj pojazd</a>
+</div>
 
 {% if vehicles %}
-    <table border="1" cellpadding="5">
-        <thead>
-        <tr>
-            <th>Nr rejestracyjny</th>
-            <th>Marka / model</th>
-            <th>Rok</th>
-            <th>Przebieg</th>
-            <th>Akcje</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for v in vehicles %}
-            <tr>
-                <td>{{ v.registration_number }}</td>
-                <td>{{ v.make }} {{ v.model }}</td>
-                <td>{{ v.year|default:"-" }}</td>
-                <td>{{ v.current_mileage|default:"-" }}</td>
-                <td>
-                    <a href="{% url 'vehicle_update' v.pk %}">Edytuj</a> |
-                    <a href="{% url 'vehicle_delete' v.pk %}">Usuń</a> |
-                    <a href="{% url 'vehicle_history' v.pk %}">Historia</a>
-                </td>
-
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+  <table class="table table-striped table-sm align-middle">
+    <thead>
+      <tr>
+        <th>Nr rejestracyjny</th>
+        <th>Marka / model</th>
+        <th>Rok</th>
+        <th>Przebieg</th>
+        <th>Akcje</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for v in vehicles %}
+      <tr>
+        <td>{{ v.registration_number }}</td>
+        <td>{{ v.make }} {{ v.model }}</td>
+        <td>{{ v.year|default:"-" }}</td>
+        <td>{{ v.current_mileage|default:"-" }}</td>
+        <td>
+          <a class="btn btn-sm btn-outline-primary" href="{% url 'vehicle_update' v.pk %}">Edytuj</a>
+          <a class="btn btn-sm btn-outline-danger" href="{% url 'vehicle_delete' v.pk %}">Usuń</a>
+          <a class="btn btn-sm btn-outline-secondary" href="{% url 'vehicle_history' v.pk %}">Historia</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 {% else %}
-    <p>Nie masz jeszcze żadnych pojazdów.</p>
+  <div class="alert alert-info">Nie masz jeszcze żadnych pojazdów.</div>
 {% endif %}
-
-</body>
-</html>
+{% endblock %}

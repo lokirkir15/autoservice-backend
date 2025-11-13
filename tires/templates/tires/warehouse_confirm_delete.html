@@ -1,19 +1,11 @@
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <title>Usuń komplet opon</title>
-</head>
-<body>
-<h1>Usuń komplet opon</h1>
-
+{% extends "base.html" %}
+{% block title %}Usuń komplet opon – MechAuto{% endblock %}
+{% block content %}
+<h1 class="h4 mb-3">Usuń komplet opon</h1>
 <p>Czy na pewno chcesz usunąć komplet <strong>{{ tire_set.identifier }}</strong> klienta {{ tire_set.customer }}?</p>
-
-<form method="post">
-    {% csrf_token %}
-    <button type="submit">Tak, usuń</button>
-    <a href="{% url 'warehouse_list' %}">Anuluj</a>
+<form method="post" class="d-flex gap-2">
+  {% csrf_token %}
+  <button type="submit" class="btn btn-danger">Tak, usuń</button>
+  <a href="{% url 'warehouse_list' %}" class="btn btn-outline-secondary">Anuluj</a>
 </form>
-
-</body>
-</html>
+{% endblock %}

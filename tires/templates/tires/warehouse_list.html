@@ -1,60 +1,42 @@
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <title>Magazyn opon</title>
-</head>
-<body>
-<h1>Magazyn opon</h1>
-
-<p>
-    Zalogowano jako: {{ request.user.username }}
-    | <a href="{% url 'warehouse_create' %}">+ Dodaj komplet</a>
-    | <a href="{% url 'workshop_dashboard' %}">Panel warsztatu</a>
-    | <a href="{% url 'logout' %}">Wyloguj</a>
-</p>
-
-{% if messages %}
-<ul>
-    {% for message in messages %}
-        <li>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
+{% extends "base.html" %}
+{% block title %}Magazyn opon – MechAuto{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 m-0">Magazyn opon</h1>
+  <a class="btn btn-success" href="{% url 'warehouse_create' %}">+ Dodaj komplet</a>
+</div>
 
 {% if tire_sets %}
-    <table border="1" cellpadding="5">
-        <thead>
-        <tr>
-            <th>ID kompletu</th>
-            <th>Klient</th>
-            <th>Pojazd</th>
-            <th>Opis</th>
-            <th>W magazynie?</th>
-            <th>Lokalizacja</th>
-            <th>Akcje</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for t in tire_sets %}
-            <tr>
-                <td>{{ t.identifier }}</td>
-                <td>{{ t.customer }}</td>
-                <td>{{ t.vehicle|default:"(nieprzypisany)" }}</td>
-                <td>{{ t.description|default:"-" }}</td>
-                <td>{{ t.is_in_storage|yesno:"Tak,Nie" }}</td>
-                <td>{{ t.location|default:"-" }}</td>
-                <td>
-                    <a href="{% url 'warehouse_update' t.pk %}">Edytuj</a> |
-                    <a href="{% url 'warehouse_delete' t.pk %}">Usuń</a>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+  <table class="table table-striped table-sm align-middle">
+    <thead>
+      <tr>
+        <th>ID kompletu</th>
+        <th>Klient</th>
+        <th>Pojazd</th>
+        <th>Opis</th>
+        <th>W magazynie?</th>
+        <th>Lokalizacja</th>
+        <th>Akcje</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for t in tire_sets %}
+      <tr>
+        <td>{{ t.identifier }}</td>
+        <td>{{ t.customer }}</td>
+        <td>{{ t.vehicle|default:"(nieprzypisany)" }}</td>
+        <td>{{ t.description|default:"-" }}</td>
+        <td>{{ t.is_in_storage|yesno:"Tak,Nie" }}</td>
+        <td>{{ t.location|default:"-" }}</td>
+        <td>
+          <a class="btn btn-sm btn-outline-primary" href="{% url 'warehouse_update' t.pk %}">Edytuj</a>
+          <a class="btn btn-sm btn-outline-danger" href="{% url 'warehouse_delete' t.pk %}">Usuń</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 {% else %}
-    <p>Magazyn jest pusty.</p>
+  <div class="alert alert-info">Magazyn jest pusty.</div>
 {% endif %}
-
-</body>
-</html>
+{% endblock %}
