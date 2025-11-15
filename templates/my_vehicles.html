@@ -16,9 +16,12 @@
         <td>{{ v.year|default:"-" }}</td>
         <td>{{ v.current_mileage|default:"-" }}</td>
         <td>
-          <a class="btn btn-sm btn-outline-primary has-tip" data-tip="Edytuj pojazd" href="{% url 'vehicle_update' v.pk %}">Edytuj</a>
-          <a class="btn btn-sm btn-outline-danger has-tip"  data-tip="Usuń pojazd"  href="{% url 'vehicle_delete' v.pk %}">Usuń</a>
-          <a class="btn btn-sm btn-outline-secondary has-tip" data-tip="Historia wizyt" href="{% url 'vehicle_history' v.pk %}">Historia</a>
+          <!-- <a class="btn btn-sm btn-outline-primary has-tip" data-tip="Edytuj pojazd" href="{% url 'vehicle_update' v.pk %}">Edytuj</a> -->
+          <!-- <a class="btn btn-sm btn-outline-danger has-tip"  data-tip="Usuń pojazd"  href="{% url 'vehicle_delete' v.pk %}">Usuń</a> -->
+          <!-- <a class="btn btn-sm btn-outline-secondary has-tip" data-tip="Historia wizyt" href="{% url 'vehicle_history' v.pk %}">Historia</a> -->
+          <a class="btn btn-sm btn-outline-primary" href="{% url 'vehicle_update' v.pk %}" data-bs-toggle="tooltip" data-bs-title="Edytuj dane pojazdu">Edytuj</a>
+          <a class="btn btn-sm btn-outline-danger" href="{% url 'vehicle_delete' v.pk %}" data-bs-toggle="tooltip" data-bs-title="Usuń pojazd z systemu">Usuń</a>
+          <a class="btn btn-sm btn-outline-secondary" href="{% url 'vehicle_history' v.pk %}" data-bs-toggle="tooltip" data-bs-title="Zobacz historię wizyt i części">Historia</a>
         </td>
       </tr>
       {% endfor %}

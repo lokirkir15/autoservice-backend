@@ -2,116 +2,105 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <title>{% block title %}MechAuto{% endblock %}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <title>{% block title %}MechAuto{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Bootstrap CSS -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-      crossorigin="anonymous"
-    >
-    <!-- Twój dedykowany arkusz -->
-    <link rel="stylesheet" href="{% static 'css/app.css' %}">
+  <!-- Bootstrap CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+    crossorigin="anonymous"
+  >
+  <!-- Twój CSS -->
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
 
-    {% block extra_head %}{% endblock %}
+  {% block extra_head %}{% endblock %}
 </head>
 <body class="bg-light d-flex flex-column min-vh-100">
 
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="{% url 'home' %}">MechAuto</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-              data-bs-target="#mainNavbar" aria-controls="mainNavbar"
-              aria-expanded="false" aria-label="Przełącz nawigację">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+  <!-- Skip link (a11y) -->
+  <a href="#content" class="visually-hidden-focusable position-absolute top-0 start-0 m-2 btn btn-sm btn-outline-secondary">
+    Przejdź do treści
+  </a>
 
-      <div class="collapse navbar-collapse" id="mainNavbar">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          {% if request.user.is_authenticated %}
-            <!-- Dla klientów -->
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'my_vehicles' %}">Moje pojazdy</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'create_appointment' %}">Umów wizytę</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'my_appointments' %}">Moje wizyty</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'my_tires' %}">Moje opony</a>
-            </li>
+  <!-- HEADER -->
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4" role="navigation" aria-label="Główna nawigacja">
+      <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
+          <img src="{% static 'img/logo.png' %}" alt="Logo MechAuto" width="28" height="28" class="d-inline-block align-text-top me-2">
+          <span class="fw-semibold">MechAuto</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#mainNavbar" aria-controls="mainNavbar"
+                aria-expanded="false" aria-label="Przełącz nawigację">
+          <span class="navbar-toggler-icon"></span>
+        </button>
 
-            {% if request.user.is_staff %}
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button"
-                   data-bs-toggle="dropdown" aria-expanded="false">
-                  Dla serwisu
-                </a>
-                <ul class="dropdown-menu">
-                  <li>
-                    <a class="dropdown-item" href="{% url 'workshop_dashboard' %}">
-                      Panel warsztatu
-                    </a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="{% url 'warehouse_list' %}">
-                      Magazyn opon
-                    </a>
-                  </li>
-                  <li><hr class="dropdown-divider"></li>
-                  <li>
-                    <a class="dropdown-item" href="/admin/" target="_blank">
-                      Panel admina Django
-                    </a>
-                  </li>
-                </ul>
-              </li>
+        <div class="collapse navbar-collapse" id="mainNavbar">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            {% if request.user.is_authenticated %}
+              <!-- Dla klientów -->
+               
+              <li class="nav-item"><a class="nav-link" href="{% url 'my_vehicles' %}">Moje pojazdy</a></li>
+              <li class="nav-item"><a class="nav-link" href="{% url 'create_appointment' %}">Umów wizytę</a></li>
+              <li class="nav-item"><a class="nav-link" href="{% url 'my_appointments' %}">Moje wizyty</a></li>
+              <li class="nav-item"><a class="nav-link" href="{% url 'my_tires' %}">Moje opony</a></li>
+              <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">O systemie</a></li>
+              {% if request.user.is_staff %}
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" role="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    Dla serwisu
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url 'workshop_dashboard' %}">Panel warsztatu</a></li>
+                    <li><a class="dropdown-item" href="{% url 'warehouse_list' %}">Magazyn opon</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="/admin/" target="_blank">Panel admina Django</a></li>
+                  </ul>
+                </li>
+              {% endif %}
             {% endif %}
-          {% endif %}
-        </ul>
+          </ul>
 
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-          {% if request.user.is_authenticated %}
-            <li class="nav-item">
-              <span class="navbar-text me-2">
-                Zalogowano jako: {{ request.user.username }}
-              </span>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'logout' %}">Wyloguj</a>
-            </li>
-          {% else %}
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'login' %}">Logowanie</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'register' %}">Rejestracja</a>
-            </li>
-          {% endif %}
-        </ul>
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            {% if request.user.is_authenticated %}
+              <li class="nav-item">
+                <span class="navbar-text me-2">Zalogowano jako: {{ request.user.username }}</span>
+              </li>
+              <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Wyloguj</a></li>
+            {% else %}
+              <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Logowanie</a></li>
+              <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Rejestracja</a></li>
+            {% endif %}
+          </ul>
+        </div>
       </div>
-    </div>
-  </nav>
+    </nav>
+  </header>
 
-  <main class="container mb-4 flex-grow-1">
+  <!-- MAIN -->
+  <main id="content" class="container mb-4 flex-grow-1" role="main">
     {% if messages %}
-      <div class="mt-2">
+      <section aria-label="Komunikaty systemowe" class="mt-2">
         {% for message in messages %}
           <div class="alert alert-{{ message.tags|default:'info' }} mb-2" role="alert">
             {{ message }}
           </div>
         {% endfor %}
-      </div>
+      </section>
     {% endif %}
 
-    {% block content %}{% endblock %}
+    <!-- Główna zawartość strony -->
+    <section class="page-section">
+      {% block content %}{% endblock %}
+    </section>
   </main>
 
+  <!-- FOOTER -->
   <footer class="py-4 text-center text-muted">
     <small class="inline-b">&copy; MechAuto</small>
   </footer>
@@ -121,6 +110,13 @@
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"
   ></script>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    tooltipTriggerList.forEach(el => new bootstrap.Tooltip(el));
+  });
+</script>
 
   {% block extra_js %}{% endblock %}
 </body>

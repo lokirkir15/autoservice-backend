@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}O systemie – MechAuto{% endblock %}
+
+{% block content %}
+<article class="prose">
+  <header class="mb-4">
+    <h1>O systemie <small class="text-muted">MechAuto</small></h1>
+    <p class="lead">To jest demonstracyjna strona pokazująca <mark>różne formatowania</mark> HTML wymagane w zadaniu.</p>
+  </header>
+
+  <section class="mb-4">
+    <h2>Struktura i cele</h2>
+    <p>
+      MechAuto to system do obsługi serwisu samochodowego. Pozwala klientom
+      <strong>umawiać wizyty</strong>, przeglądać <em>historię pojazdu</em> i zarządzać kompletami opon.
+      Dla pracowników dostępny jest panel warsztatu i magazyn.
+    </p>
+    <p>
+      Projekt zbudowany jest w standardzie <abbr title="HyperText Markup Language">HTML5</abbr>,
+      z backendem <code>Django</code> i responsywnym interfejsem w oparciu o Bootstrap.
+    </p>
+  </section>
+
+  <section class="mb-4">
+    <h2>Przykłady formatowania</h2>
+
+    <h3>Nagłówki i akapity</h3>
+    <p>To jest zwykły akapit. Możemy w nim wyróżnić <strong>ważne informacje</strong>, zaakcentować <em>terminy</em> lub
+       zaznaczyć <mark>kluczowe frazy</mark>.</p>
+
+    <h3>Kod (inline i blokowy)</h3>
+    <p>Przykład inline: <code>python manage.py runserver</code></p>
+    <pre><code># przykład bloku kodu (shell)
+$ python -m venv venv
+$ source venv/bin/activate
+$ python manage.py migrate
+</code></pre>
+
+    <h3>Cytat (blockquote)</h3>
+    <blockquote>
+      „Jakość to robić coś dobrze, gdy nikt nie patrzy.”
+      <footer class="blockquote-footer mt-1">Henry Ford</footer>
+    </blockquote>
+
+    <h3>Listy</h3>
+    <p>Lista nieuporządkowana:</p>
+    <ul>
+      <li>Umawianie wizyt</li>
+      <li>Historia pojazdu</li>
+      <li>Magazyn opon</li>
+    </ul>
+
+    <p>Lista uporządkowana:</p>
+    <ol>
+      <li>Dodaj pojazd</li>
+      <li>Wybierz usługę</li>
+      <li>Potwierdź termin</li>
+    </ol>
+
+    <p>Lista opisowa (description list):</p>
+    <dl>
+      <dt>Pojazd</dt>
+      <dd>Obiekt reprezentujący auto klienta (VIN, rejestracja, przebieg).</dd>
+      <dt>Wizyta</dt>
+      <dd>Termin z przypisanym stanowiskiem i technikiem.</dd>
+      <dt>Komplet opon</dt>
+      <dd>Identyfikowalny zestaw 4 opon powiązany z klientem.</dd>
+    </dl>
+  </section>
+
+  <section class="mb-4">
+    <h2>Dodatkowe informacje</h2>
+    <p class="text-muted">
+      Elementy UI sygnalizują interakcje (hover/focus), nagłówki tabel „przyklejają się”
+      dzięki <code>position: sticky</code>, a tabela przewija się poziomo na wąskich ekranach.
+    </p>
+  </section>
+</article>
+{% endblock %}

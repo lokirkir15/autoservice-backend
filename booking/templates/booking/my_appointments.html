@@ -25,6 +25,7 @@
         <td>{{ a.vehicle }}</td>
         <td>{{ a.service_type }}</td>
         <td>{{ a.get_status_display }}</td>
+        <td><span class="status-badge">{{ a.get_status_display }}</span></td>
         <td>{{ a.assigned_technician|default:"-" }}</td>
         <td>{{ a.workstation|default:"-" }}</td>
       </tr>
