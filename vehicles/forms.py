@@ -12,6 +12,7 @@ class VehicleForm(forms.ModelForm):
             "model",
             "year",
             "current_mileage",
+            "photo", 
         ]
         labels = {
             "registration_number": "Nr rejestracyjny",
@@ -20,4 +21,5 @@ class VehicleForm(forms.ModelForm):
             "model": "Model",
             "year": "Rok produkcji",
             "current_mileage": "Aktualny przebieg",
+            "photo": "Zdjęcie pojazdu",
         }

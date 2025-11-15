@@ -142,6 +142,20 @@ USE_I18N = True
 USE_TZ = True
 
 
+# --- MEDIA (dev) ---
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
+# --- Cloud (prod) — działa gdy podasz CLOUDINARY_URL w env ---
+import os
+CLOUDINARY_URL = os.getenv("CLOUDINARY_URL", "")
+
+if CLOUDINARY_URL:
+    INSTALLED_APPS += ["cloudinary", "cloudinary_storage"]
+    DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+    # WhiteNoise nie serwuje mediów – Cloudinary rozwiązuje ten problem na Renderze
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 

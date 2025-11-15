@@ -2,7 +2,15 @@
 {% block title %}{{ title }} – MechAuto{% endblock %}
 {% block content %}
 <h1 class="h3 mb-3">{{ title }}</h1>
-<form method="post" class="card p-3">
+
+{% if form.instance.pk and form.instance.photo %}
+  <div class="mb-3">
+    <p class="text-muted">Aktualne zdjęcie:</p>
+    <img src="{{ form.instance.photo.url }}" alt="Zdjęcie pojazdu" style="max-height: 120px">
+  </div>
+{% endif %}
+
+<form method="post" enctype="multipart/form-data" class="card p-3">
   {% csrf_token %}
   {{ form.as_p }}
   <div class="d-flex gap-2">

@@ -15,7 +15,7 @@ def my_vehicles(request):
 @login_required
 def vehicle_create(request):
     if request.method == "POST":
-        form = VehicleForm(request.POST)
+        form = VehicleForm(request.POST, request.FILES)
         if form.is_valid():
             vehicle = form.save(commit=False)
             vehicle.owner = request.user
@@ -24,24 +24,21 @@ def vehicle_create(request):
             return redirect("my_vehicles")
     else:
         form = VehicleForm()
-
     return render(request, "vehicles/vehicle_form.html", {"form": form, "title": "Dodaj pojazd"})
-
 
 @login_required
 def vehicle_update(request, pk):
     vehicle = get_object_or_404(Vehicle, pk=pk, owner=request.user)
-
     if request.method == "POST":
-        form = VehicleForm(request.POST, instance=vehicle)
+        form = VehicleForm(request.POST, request.FILES, instance=vehicle)
         if form.is_valid():
             form.save()
             messages.success(request, "Dane pojazdu zostały zaktualizowane.")
             return redirect("my_vehicles")
     else:
         form = VehicleForm(instance=vehicle)
-
     return render(request, "vehicles/vehicle_form.html", {"form": form, "title": "Edytuj pojazd"})
+
 
 
 @login_required
