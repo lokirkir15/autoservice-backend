@@ -1,0 +1,71 @@
+/* ---------- Zmienne i podstawy ---------- */
+:root{
+  --brand: #0d6efd;
+  --brand-600: #0b5ed7;
+  --muted: #6c757d;
+}
+
+html { scroll-behavior: smooth; }
+img { max-width: 100%; height: auto; display: block; } /* responsive images */
+
+/* Layout z „przyklejoną” stopką */
+body{ min-height:100vh; display:flex; flex-direction:column; }
+main{ flex:1; }
+
+/* Sygnały interakcji */
+a, .btn, .clickable { cursor: pointer; }
+.card:hover{ box-shadow:0 8px 24px rgba(0,0,0,.08); transition: box-shadow .2s; }
+
+/* Miniatury w tabelach pojazdów */
+.img-thumb{ width:64px; height:auto; object-fit:cover; border-radius:6px; }
+
+/* „Sticky” nagłówki tabel (position) */
+.table-sticky thead th{ position: sticky; top: 0; background:#fff; z-index: 1; }
+
+/* Responsywne tabele – własny wrapper + wsparcie dla mobile scroll */
+.table-wrap{ overflow-x:auto; }
+.table-wrap table{ min-width: 520px; }
+
+/* Drobne „narzędziowe” klasy – display */
+.inline   { display:inline; }
+.block    { display:block; }
+.inline-b { display:inline-block; }
+
+/* Tooltips w czystym CSS: <a class="has-tip" data-tip="Tekst"> */
+.has-tip{ position:relative; }
+.has-tip:hover::after{
+  content: attr(data-tip);
+  position:absolute; bottom:125%; left:50%; transform: translateX(-50%);
+  background:#000; color:#fff; padding:.35rem .5rem; font-size:.75rem;
+  border-radius:.35rem; white-space:nowrap; pointer-events:none;
+  opacity:.95;
+}
+
+/* Stany focus/hover na linkach w tabelach Akcje */
+.table .btn-outline-primary:hover{ background: var(--brand); color:#fff; border-color: var(--brand); }
+.table .btn-outline-danger:hover { background: #dc3545; color:#fff; border-color:#dc3545; }
+
+/* ---------- RWD: 3 progi własnych media queries ---------- */
+/* Mobile-first (do 575px) – nic nie nadpisujemy, to baza */
+
+/* ≥576px: delikatne zwiększenie typografii */
+@media (min-width: 576px){
+  body{ font-size: 1rem; }
+  .img-thumb{ width:72px; }
+}
+
+/* ≥768px: więcej przestrzeni, kolumny kart 2-up */
+@media (min-width: 768px){
+  .cards-2 { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:1rem; }
+}
+
+/* ≥992px: 3 kolumny kart, ciaśniejsze tabele */
+@media (min-width: 992px){
+  .cards-3 { display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:1rem; }
+  .table td, .table th{ padding:.5rem .6rem; }
+}
+
+/* Drobna wersja dark preferencji systemu (opcjonalnie) */
+@media (prefers-color-scheme: dark){
+  .table-sticky thead th{ background:#111; color:#fff; }
+}
