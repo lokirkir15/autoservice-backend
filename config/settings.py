@@ -147,7 +147,6 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 # --- Cloud (prod) — działa gdy podasz CLOUDINARY_URL w env ---
-import os
 CLOUDINARY_URL = os.getenv("CLOUDINARY_URL", "")
 
 if CLOUDINARY_URL:
