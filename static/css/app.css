@@ -5,6 +5,12 @@
   --muted: #6c757d;
 }
 
+/* W ciemnym motywie lekko inne odcienie brandu */
+[data-bs-theme="dark"]{
+  --brand: #66b0ff;
+  --brand-600:#99c9ff;
+}
+
 html { scroll-behavior: smooth; }
 img { max-width: 100%; height: auto; display: block; } /* responsive images */
 
@@ -47,6 +53,26 @@ a, .btn, .clickable { cursor: pointer; }
   color:#1f3b8f;
   border:1px solid #cdd6ff;
 }
+[data-bs-theme="dark"] .status-badge{
+  background:#0b1a3a; color:#cfe0ff; border-color:#1b2a4a;
+}
+
+/* thead w dark – żeby nie było białego paska */
+[data-bs-theme="dark"] .table-sticky thead th{
+  background:#111 !important; color:#fff;
+}
+
+/* cytat i kod – wariant dark */
+[data-bs-theme="dark"] blockquote{
+  background:#0f172a; border-left-color:#1f2937; color:#cbd5e1;
+}
+[data-bs-theme="dark"] pre{
+  background:#0b1220; color:#dbeafe;
+}
+[data-bs-theme="dark"] code{
+  background:#1f2937; color:#e5e7eb;
+}
+
 
 /* Tooltips w czystym CSS: <a class="has-tip" data-tip="Tekst"> */
 .has-tip{ position:relative; }

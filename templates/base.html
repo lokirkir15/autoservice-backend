@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="pl" data-bs-theme="light">
 <head>
   <meta charset="UTF-8">
   <title>{% block title %}MechAuto{% endblock %}</title>
@@ -18,7 +18,7 @@
 
   {% block extra_head %}{% endblock %}
 </head>
-<body class="bg-light d-flex flex-column min-vh-100">
+<body id="top" class="d-flex flex-column min-vh-100 bg-body">
 
   <!-- Skip link (a11y) -->
   <a href="#content" class="visually-hidden-focusable position-absolute top-0 start-0 m-2 btn btn-sm btn-outline-secondary">
@@ -67,6 +67,16 @@
           </ul>
 
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <button id="themeToggle"
+                      class="btn btn-sm btn-outline-light ms-2"
+                      type="button"
+                      data-bs-toggle="tooltip"
+                      data-bs-title="Przełącz na ciemny">
+                <span class="theme-icon" aria-hidden="true">🌙</span>
+                <span class="visually-hidden">Przełącz motyw</span>
+              </button>
+            </li>
             {% if request.user.is_authenticated %}
               <li class="nav-item">
                 <span class="navbar-text me-2">Zalogowano jako: {{ request.user.username }}</span>
@@ -118,6 +128,12 @@
   });
 </script>
 
+<script src="{% static 'js/app.js' %}"></script>
+
   {% block extra_js %}{% endblock %}
+  <a href="#top"
+   class="btn btn-primary btn-to-top"
+   title="Do góry"
+   aria-label="Przewiń do góry">↑</a>
 </body>
 </html>
